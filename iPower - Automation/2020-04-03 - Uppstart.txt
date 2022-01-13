@@ -1,0 +1,42 @@
+Power LPAR-inventering (VM-inventering)
+	- Finns något liknande PowerCLI mot Power HMC? PowerVM/PowerSC?
+	- CPU, RAM
+	- Tilldelade volymer från SAN
+
+Licensinventering
+	- Prio på HMC
+	
+Utskjutning av LPAR
+	- Finns liknande PowerCLI?
+	- NIM-server med OS-image (INIT-host med templates och OS-image)
+	- FC-koppling
+	- PowerVM/PowerSC tänkbara gränssnitt?
+
+PTF:er
+	- Uppdateringsfiler
+	- Centralt repository
+	- PowerVM/PowerCM
+	
+One-click evacuation
+	- Sätta host i maintanece
+	- Går att manuellt, med vissa begränsningar
+	- PowerVM/PowerCM
+	
+Övervakning
+	- ActX
+	- Avvakta Ivers utredning av övervakningssystem
+	
+Grafning
+	- Grafning i Grafana
+	- rrd-filer
+
+Backup
+	- BRMS
+	
+Actions:
+Erik kolla på vilka API/gränssnitts-möjligheter som finns idag /FDER
+	- Automation av mängd backup/lagring -> fakturering
+
+Kolla upp kostander för PowerVM /Per
+
+Grafana /FDER

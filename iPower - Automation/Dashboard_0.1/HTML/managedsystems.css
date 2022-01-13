@@ -1,0 +1,137 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+html {
+	background-color: #223344;
+	font-size: 110%;
+}
+body {
+	
+}
+table {
+	margin: auto;
+	margin-top: 20px;
+	border-collapse: separate;
+    border-spacing: 0;
+}
+th {
+	padding: 1rem;
+	color: #44DDAA;
+	font-size: 1.3rem;
+	font-family: Arial, Helvetica, sans-serif;
+}
+td {
+	padding: 20px;
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 1.05rem;
+	color: #DDDDDD;
+	border: 0.15rem solid #223344;
+    border-radius: 0.35rem;
+    -moz-border-radius: 0.35rem;
+}
+tr:nth-child(even) > td {
+	background-color: #354657
+}
+tr:nth-child(odd) > td {
+	background-color: #2C3E4F
+}
+
+tr > td:nth-child(1){
+	text-align: left;
+	font-weight: bold;
+}
+
+/* ATTENTION COLUMN */
+tr > td:nth-child(7) > span {
+	display: inline-block;
+	padding-left: 0.2rem;
+	padding-right: 0.2rem;
+	margin-left: 0.1rem;
+	margin-right: 0.1rem;
+	font-weight: bold;
+	color: #223344;
+	background-color: #DDDD55;
+	border: 0px;
+    border-radius: 0.1rem;
+    -moz-border-radius: 0.1rem;
+}
+
+/* SUPPORTED POWER GENS */
+tr > td:nth-child(2) {
+	text-align: left;
+}
+tr > td:nth-child(2) > span {
+	display: inline-block;
+	min-width: 1rem;
+	padding-left: 0.2rem;
+	padding-right: 0.2rem;
+	margin-left: 0.3rem;
+	font-weight: bold;
+	text-align: center;
+	border: 0px;
+    border-radius: 0.1rem;
+    -moz-border-radius: 0.1rem;
+}
+
+/* LPAR STATUS */
+tr > td:nth-child(8) {
+	text-align: left;
+}
+tr > td:nth-child(8) {
+	text-align: left;
+}
+tr > td:nth-child(8) > span {
+	display: inline-block;
+	width: 1.8rem;
+	padding-left: 0.2rem;
+	padding-right: 0.2rem;
+	margin-left: 0.1rem;
+	margin-right: 0.1rem;
+	text-align: center;
+	font-weight: bold;
+	border: 0px;
+    border-radius: 0.1rem;
+    -moz-border-radius: 0.1rem;
+}
+
+/* BOTTOM ROW */
+tr:nth-last-child(1) > td {
+	background-color: #44DDAA;
+	color: #223344;
+	font-weight: bold;
+	text-align: center;
+}
+
+/* COLOR CLASSES */
+.green {
+	color: #223344;
+	background-color: #44DDAA;	
+}
+.grey {
+	color: #223344;
+	background-color: #BBBBBB;	
+}
+.yellow {
+	color: #223344;
+	background-color: #DDDD55;	
+}
+.red {
+	color: #223344;
+	background-color: #EE7788;	
+}
+.blue {
+	color: #223344;
+	background-color: #5580EE;	
+}
+.orange {
+	color: #223344;
+	background-color: #FFBB77;	
+}
+.purple {
+	color: #223344;
+	background-color: #CC77DD;	
+}
+/*tr > td:nth-child(7) > span:nth-child(2) */
+	

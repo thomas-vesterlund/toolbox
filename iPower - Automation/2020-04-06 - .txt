@@ -1,0 +1,8 @@
+Erik kolla på vilka API/gränssnitts-möjligheter som finns idag
+	- Kan påbörja detta 2020-04-14.
+	- Behöver uppgifter gällande testmiljö. Per fixar.
+	- Automation av mängd backup/lagring -> fakturering
+
+Kolla upp kostander för PowerVM /Per
+
+Grafana /FDER

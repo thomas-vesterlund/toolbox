@@ -1,0 +1,11 @@
+# INFO OM API, GUIDE
+https://www.dellemc.com/en-us/collaterals/unauth/technical-guides-support-information/products/networking-4/docu85241.pdf
+
+# URI-dokumentation etc
+https://pwrdd04.ipower.local/api/doc/#
+
+
+# INt data
+VTL Pools used
+försök slå ihop värden per domännamn
+service-status för alla datadomain
