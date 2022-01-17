@@ -1,0 +1,98 @@
+Get inventory 2.0
+
+
+$ProgressPreference = 'SilentlyContinue';
+
+function Get-Inventory {
+    Param (
+        [string]$Server,
+        [string]$User,
+        [string]$Password
+    )
+
+	# Connect
+	Set-PowerCLIConfiguration -Scope User -ParticipateInCEIP $false  -confirm:$false| Out-Null
+	Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -DefaultVIServerMode Single -confirm:$false | Out-Null
+	Connect-VIServer -Server $Server -User $User -Password $Password | Out-Null
+
+	# Datastores
+	$datastores = Get-Datastore | select CapacityMB,FreeSpaceMB,Id,Name | %{ @{
+		UID = $_.Id.Substring(10)
+		Name = $_.Name
+		Capacity = $_.CapacityMB * 1024 * 1024
+		UsedCapacity = ($_.CapacityMB - $_.FreeSpaceMB) * 1024 * 1024
+	}}
+
+	# Virtual machines
+    $vmQuery = Get-View -ViewType VirtualMachine -property Name,Config.Hardware.NumCPU,Config.Hardware.NumCoresPerSocket,Config.Hardware.MemoryMB,Config.Uuid,Guest.HostName,Guest.IpAddress,Guest.Net,Runtime.Host,Runtime.PowerState,Config.Hardware.Device,LayoutEx.Disk,LayoutEx.File,Config.Template
+	$servers = @();
+	foreach ($vm in $vmQuery) {
+
+        if ($vm.Config -eq $null) {
+            continue;
+        }
+
+        if ($vm.Config.Template) {
+            continue;
+        }
+
+		# Disks
+        $diskQuery = $vm.Config.Hardware.Device|where {$_.GetType().Name -eq "VirtualDisk"}
+		$disks = @();
+		foreach ($vdisk in $diskQuery) {
+
+			# Used
+			$usedCapacity = 0;
+			$fileKeys = $vm.LayoutEx.Disk|Where {$_.Key -eq $vdisk.Key}| %{ $_.Chain.fileKey};
+			$vm.LayoutEx.File|where {$_.Type -eq "diskExtent" -and $fileKeys.Contains($_.Key)} | Foreach { $usedCapacity += $_.Size }
+
+			# Controller Address
+			$controllerKey = $vdisk.ControllerKey;
+			$controllerDelta = if ($controllerKey -ge 1000) { 1000 } else { 200 }
+			$controllerAddress = @{
+				ControllerKey = $controllerKey - $controllerDelta
+				ControllerType = if ($controllerKey -ge 1000) { 1 } else { 2 }
+				UnitNumber = $vdisk.UnitNumber
+			}
+
+			$vdiskUUID = $null;
+			if ($vdisk.Backing.Uuid -ne $null) {
+				$vdiskUUID = $vdisk.Backing.Uuid.ToLowerInvariant();
+			}
+
+			$disks += @{
+				OsDiskUID = $vdiskUUID
+				CloudDiskUID = $vdiskUUID
+				LegacyCloudDiskUID = $vdiskUUID
+				Datastore = $vdisk.Backing.Datastore.Value
+				MaximumCapacity = $vdisk.CapacityInBytes
+				UsedCapacity = $usedCapacity
+				ControllerAddress = $controllerAddress
+			};
+		}
+    
+		$ips = @($vm.Guest.IPAddress|Where {$_ -notmatch ":" -and $_ -ne $null });
+    
+		$servers += @{
+			UID = $vm.Config.uuid.ToLowerInvariant()
+			UID2 = $vm.MoRef.Value
+			FQDN = if ($vm.Guest.HostName) {$vm.Guest.HostName.ToLower()} else {$vm.Name.ToLower()}
+			CPUTotal = 0
+			CPUCoreQuantity = $vm.Config.Hardware.NumCoresPerSocket
+			CPUQuantity = $vm.Config.Hardware.NumCpu / $vm.Config.Hardware.NumCoresPerSocket
+			InventoryName = $vm.Name
+			HostId = $vm.Runtime.Host.Value
+			IsPoweredOn = $vm.Runtime.PowerState -eq "PoweredOn"
+			RAM = $vm.Config.Hardware.MemoryMB * 1024 * 1024
+			IPAddresses = $ips
+			PrimaryIpAddress = $ips[0]
+			Disks = $disks
+		}
+	}
+
+	return @{
+		Datastores = $datastores
+		Servers = $servers
+
+	} | ConvertTo-Json -Depth 5
+}
